@@ -1,0 +1,1788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Relic Fit - Professional Workout App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #f5f5f5;
+            --secondary: #ffffff;
+            --accent: #ff6b00;
+            --accent-dark: #e55a00;
+            --text-primary: #1a1a1a;
+            --text-secondary: #555555;
+            --button-primary: #00bfa6;
+            --button-primary-dark: #00a892;
+            --button-text: #ffffff;
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+            --radius: 16px;
+            --radius-sm: 8px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --gradient-primary: linear-gradient(135deg, #ff6b00 0%, #ff8c42 100%);
+            --gradient-secondary: linear-gradient(135deg, #00bfa6 0%, #00d4b8 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+            padding-bottom: 90px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 100%;
+            padding: 0 16px;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--secondary);
+            padding: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo i {
+            font-size: 22px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .streak-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--gradient-primary);
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .streak-count {
+            font-weight: 700;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            font-size: 18px;
+            transition: var(--transition);
+        }
+
+        .icon-btn:active {
+            background-color: rgba(0,0,0,0.05);
+        }
+
+        /* Main Content */
+        .hero {
+            padding: 24px 20px;
+            text-align: center;
+            background-color: var(--secondary);
+            margin: 20px 16px 0;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        .hero h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .hero p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        .plan-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .info-card {
+            flex: 1;
+            min-width: 100px;
+            background-color: var(--primary);
+            padding: 14px 10px;
+            border-radius: var(--radius);
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .info-card:active {
+            transform: translateY(2px);
+        }
+
+        .info-card .label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .info-card .value {
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            margin: 20px 16px;
+            background-color: var(--secondary);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .progress-title {
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: var(--primary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-secondary);
+            border-radius: 4px;
+            width: 65%;
+            transition: width 0.5s ease;
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Sections */
+        .sections-container {
+            margin-top: 24px;
+        }
+
+        .section {
+            background-color: var(--secondary);
+            margin: 16px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .section:active {
+            transform: translateY(2px);
+        }
+
+        .section-header {
+            padding: 18px 16px;
+            background: var(--gradient-primary);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-header h2 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .section-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .section-toggle.rotated {
+            transform: rotate(180deg);
+        }
+
+        .section-description {
+            padding: 16px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            border-bottom: 1px solid var(--primary);
+        }
+
+        .exercises-list {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .exercises-list.expanded {
+            max-height: 2000px;
+        }
+
+        .exercise {
+            padding: 18px 16px;
+            border-bottom: 1px solid var(--primary);
+            transition: var(--transition);
+        }
+
+        .exercise:last-child {
+            border-bottom: none;
+        }
+
+        .exercise:active {
+            background-color: rgba(0,0,0,0.02);
+        }
+
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .exercise-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .exercise-time {
+            background-color: var(--primary);
+            padding: 6px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .exercise-details {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .exercise-reps {
+            background: var(--gradient-secondary);
+            color: var(--button-text);
+            padding: 6px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .exercise-instructions {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .exercise-toggle {
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            padding: 0;
+            margin-top: 8px;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .exercise-toggle:active {
+            color: var(--accent-dark);
+        }
+
+        .exercise-details-content {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--primary);
+            display: none;
+        }
+
+        .exercise-details-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .how-to-list {
+            padding-left: 20px;
+            margin-bottom: 12px;
+        }
+
+        .how-to-list li {
+            margin-bottom: 8px;
+        }
+
+        .benefits {
+            font-style: italic;
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .exercise-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            flex: 1;
+        }
+
+        .btn:active {
+            transform: translateY(2px);
+        }
+
+        .btn-primary {
+            background: var(--gradient-secondary);
+            color: var(--button-text);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--secondary);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            box-shadow: 0 -2px 12px rgba(0,0,0,0.1);
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            transition: var(--transition);
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+        }
+
+        .nav-item.active {
+            color: var(--accent);
+            background-color: rgba(255, 107, 0, 0.08);
+        }
+
+        .nav-icon {
+            font-size: 20px;
+        }
+
+        /* Workout Timer */
+        .timer-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            color: white;
+            display: none;
+            padding: 20px;
+        }
+
+        .timer-container.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .timer-header {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 20px;
+        }
+
+        .timer-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+        }
+
+        .timer-display {
+            font-size: 72px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .exercise-name-display {
+            font-size: 24px;
+            margin-bottom: 8px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .exercise-instructions-display {
+            text-align: center;
+            margin-bottom: 30px;
+            color: rgba(255,255,255,0.8);
+            max-width: 300px;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .timer-btn {
+            padding: 14px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            border: none;
+            font-size: 16px;
+            min-width: 120px;
+            transition: var(--transition);
+        }
+
+        .timer-btn:active {
+            transform: scale(0.98);
+        }
+
+        .timer-btn.primary {
+            background: var(--gradient-secondary);
+            color: var(--button-text);
+        }
+
+        .timer-btn.secondary {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .timer-progress {
+            width: 100%;
+            max-width: 300px;
+            height: 6px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .timer-progress-fill {
+            height: 100%;
+            background: var(--gradient-secondary);
+            width: 0%;
+            transition: width 1s linear;
+        }
+
+        /* Calendar */
+        .calendar-container {
+            background-color: var(--secondary);
+            margin: 16px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            display: none;
+        }
+
+        .calendar-container.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-title {
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .calendar-nav-btn {
+            background: var(--primary);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .calendar-nav-btn:active {
+            background: #e0e0e0;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            font-weight: 600;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .calendar-day.weekday {
+            font-weight: 500;
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .calendar-day.completed {
+            background: var(--gradient-secondary);
+            color: var(--button-text);
+            box-shadow: var(--shadow);
+        }
+
+        .calendar-day.missed {
+            background-color: #ff6b6b;
+            color: white;
+        }
+
+        .calendar-day.today {
+            border: 2px solid var(--accent);
+        }
+
+        .calendar-day.future {
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+
+        .calendar-legend {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .legend-completed {
+            background: var(--gradient-secondary);
+        }
+
+        .legend-missed {
+            background: #ff6b6b;
+        }
+
+        .legend-today {
+            border: 2px solid var(--accent);
+        }
+
+        /* Stats View */
+        .stats-container {
+            background-color: var(--secondary);
+            margin: 16px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            display: none;
+        }
+
+        .stats-container.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .stats-header {
+            margin-bottom: 20px;
+        }
+
+        .stats-title {
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--primary);
+            padding: 16px;
+            border-radius: var(--radius);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .chart-container {
+            height: 200px;
+            background: var(--primary);
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-end;
+            padding: 16px;
+            gap: 8px;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: var(--gradient-primary);
+            border-radius: 4px 4px 0 0;
+            min-height: 10px;
+            transition: height 0.5s ease;
+        }
+
+        /* Settings View */
+        .settings-container {
+            background-color: var(--secondary);
+            margin: 16px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            display: none;
+        }
+
+        .settings-container.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .settings-header {
+            margin-bottom: 20px;
+        }
+
+        .settings-title {
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .settings-list {
+            list-style: none;
+        }
+
+        .settings-item {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+
+        .settings-label {
+            font-weight: 500;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--button-primary);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        .bounce {
+            animation: bounce 2s infinite;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 360px) {
+            .hero h1 {
+                font-size: 20px;
+            }
+            
+            .section-header h2 {
+                font-size: 16px;
+            }
+            
+            .exercise-name {
+                font-size: 14px;
+            }
+            
+            .timer-display {
+                font-size: 60px;
+            }
+            
+            .timer-btn {
+                min-width: 100px;
+                padding: 12px 20px;
+            }
+        }
+
+        /* Loading States */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 4px;
+        }
+
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text-primary);
+            color: white;
+            padding: 12px 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            display: none;
+            max-width: 80%;
+            text-align: center;
+        }
+
+        .toast.show {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translate(-50%, 20px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <i class="fas fa-dumbbell"></i>
+            <span>Relic Fit</span>
+        </div>
+        <div class="header-actions">
+            <div class="streak-info">
+                <i class="fas fa-fire"></i>
+                <span class="streak-count">3</span>
+                <span>day streak</span>
+            </div>
+            <button class="icon-btn">
+                <i class="fas fa-bell"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Your Daily Workout Plan</h1>
+            <p>Muscle gain, strength, and focus in 20-30 minutes</p>
+            <div class="plan-info">
+                <div class="info-card">
+                    <div class="label">Duration</div>
+                    <div class="value">20-30 min</div>
+                </div>
+                <div class="info-card">
+                    <div class="label">Frequency</div>
+                    <div class="value">5-6 days/week</div>
+                </div>
+                <div class="info-card">
+                    <div class="label">Focus</div>
+                    <div class="value">Strength & Focus</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Progress Section -->
+        <section class="progress-section">
+            <div class="progress-header">
+                <div class="progress-title">Weekly Progress</div>
+                <div class="progress-percent">65%</div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <div class="progress-stats">
+                <span>4/6 workouts</span>
+                <span>This week</span>
+            </div>
+        </section>
+
+        <!-- Workout Sections -->
+        <div class="sections-container" id="workoutView">
+            <!-- Sections will be populated by JavaScript -->
+        </div>
+
+        <!-- Calendar View -->
+        <div class="calendar-container" id="calendarView">
+            <div class="calendar-header">
+                <div class="calendar-title">October 2023</div>
+                <div class="calendar-nav">
+                    <button class="calendar-nav-btn" id="prevMonth">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="calendar-nav-btn" id="nextMonth">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="calendar-grid" id="calendarGrid">
+                <!-- Calendar days will be populated by JavaScript -->
+            </div>
+            <div class="calendar-legend">
+                <div class="legend-item">
+                    <div class="legend-color legend-today"></div>
+                    <span>Today</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color legend-completed"></div>
+                    <span>Completed</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color legend-missed"></div>
+                    <span>Missed</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats View -->
+        <div class="stats-container" id="statsView">
+            <div class="stats-header">
+                <div class="stats-title">Your Progress</div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">Workouts</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">5.2h</div>
+                    <div class="stat-label">Time</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">Current Streak</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">7</div>
+                    <div class="stat-label">Best Streak</div>
+                </div>
+            </div>
+            <div class="stats-title" style="margin-bottom: 16px;">Weekly Activity</div>
+            <div class="chart-container" id="activityChart">
+                <!-- Chart bars will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Settings View -->
+        <div class="settings-container" id="settingsView">
+            <div class="settings-header">
+                <div class="settings-title">Settings</div>
+            </div>
+            <ul class="settings-list">
+                <li class="settings-item">
+                    <span class="settings-label">Notifications</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </li>
+                <li class="settings-item">
+                    <span class="settings-label">Sound Effects</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </li>
+                <li class="settings-item">
+                    <span class="settings-label">Dark Mode</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </li>
+                <li class="settings-item">
+                    <span class="settings-label">Rest Day Reminders</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Timer Overlay -->
+    <div class="timer-container" id="timerView">
+        <div class="timer-header">
+            <div></div> <!-- Spacer -->
+            <button class="timer-close" id="closeTimer">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="timer-display">01:00</div>
+        <div class="exercise-name-display">Arm Circles</div>
+        <div class="exercise-instructions-display">Rotate arms forward for 30 seconds, then backward for 30 seconds.</div>
+        <div class="timer-controls">
+            <button class="timer-btn secondary" id="pauseTimer">
+                <i class="fas fa-pause"></i>
+                Pause
+            </button>
+            <button class="timer-btn primary" id="completeExercise">
+                <i class="fas fa-check"></i>
+                Complete
+            </button>
+        </div>
+        <div class="timer-progress">
+            <div class="timer-progress-fill"></div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        Workout completed! 🔥
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <div class="nav-item active" data-view="workoutView">
+            <div class="nav-icon"><i class="fas fa-dumbbell"></i></div>
+            <span>Workout</span>
+        </div>
+        <div class="nav-item" data-view="calendarView">
+            <div class="nav-icon"><i class="fas fa-calendar"></i></div>
+            <span>Calendar</span>
+        </div>
+        <div class="nav-item" data-view="statsView">
+            <div class="nav-icon"><i class="fas fa-chart-line"></i></div>
+            <span>Stats</span>
+        </div>
+        <div class="nav-item" data-view="settingsView">
+            <div class="nav-icon"><i class="fas fa-cog"></i></div>
+            <span>Settings</span>
+        </div>
+    </nav>
+
+    <script>
+        // App data
+        const appData = {
+            app_name: "Relic Fit",
+            theme: {
+                type: "light",
+                colors: {
+                    primary: "#f5f5f5",
+                    secondary: "#ffffff",
+                    accent: "#ff6b00",
+                    text_primary: "#1a1a1a",
+                    text_secondary: "#555555",
+                    button_primary: "#00bfa6",
+                    button_text: "#ffffff"
+                }
+            },
+            streak_system: {
+                calendar_enabled: true,
+                strike_day_after_completion: true,
+                locked_if_missed: true,
+                streak_message: "Keep your streak alive! Missing a day will lock your progress."
+            },
+            plan: {
+                goal: "Muscle gain, strength, and focus",
+                duration: "20–30 minutes",
+                frequency: "5–6 days per week",
+                sections: [
+                    {
+                        title: "🔥 WARM-UP (5 minutes)",
+                        description: "Do this before every workout to prepare your body.",
+                        exercises: [
+                            {
+                                name: "Arm Circles",
+                                time: "1 min",
+                                reps: "20 forward + 20 backward",
+                                instructions: "Rotate arms forward for 30 seconds, then backward for 30 seconds.",
+                                how_to_do: [
+                                    "Stand tall with feet shoulder-width apart.",
+                                    "Extend arms out to the sides at shoulder height.",
+                                    "Make small circles forward for 30 seconds.",
+                                    "Reverse direction for another 30 seconds."
+                                ],
+                                benefits: "Warms up shoulders and improves mobility."
+                            },
+                            {
+                                name: "Hip Circles",
+                                time: "30 sec",
+                                reps: "10 each direction",
+                                instructions: "Hands on hips, move hips in slow circles both directions.",
+                                how_to_do: [
+                                    "Place your hands on your hips.",
+                                    "Move hips in a circular motion clockwise 10 times.",
+                                    "Switch to counterclockwise and repeat."
+                                ],
+                                benefits: "Loosens hip joints and improves flexibility."
+                            },
+                            {
+                                name: "High Knees",
+                                time: "1 min",
+                                reps: "30 each leg",
+                                instructions: "Jog in place, lifting knees to waist level.",
+                                how_to_do: [
+                                    "Stand tall with arms bent at sides.",
+                                    "Run in place while driving knees up to waist height.",
+                                    "Keep a steady pace and engage your core."
+                                ],
+                                benefits: "Increases heart rate and warms up lower body."
+                            },
+                            {
+                                name: "Shoulder Rolls",
+                                time: "30 sec",
+                                reps: "10 forward + 10 backward",
+                                instructions: "Roll shoulders slowly forward and backward.",
+                                how_to_do: [
+                                    "Stand straight with relaxed shoulders.",
+                                    "Roll both shoulders forward in a circular motion 10 times.",
+                                    "Then roll backward 10 times."
+                                ],
+                                benefits: "Improves shoulder mobility and posture."
+                            },
+                            {
+                                name: "Side Stretch",
+                                time: "2 min",
+                                reps: "Hold 30 sec each side, repeat twice",
+                                instructions: "Reach one arm overhead, lean gently to the side. Switch sides.",
+                                how_to_do: [
+                                    "Stand with feet hip-width apart.",
+                                    "Raise one arm and lean to the opposite side.",
+                                    "Hold for 30 seconds, then switch sides.",
+                                    "Repeat once more on both sides."
+                                ],
+                                benefits: "Stretches obliques and improves flexibility."
+                            }
+                        ]
+                    },
+                    {
+                        title: "💪 MAIN WORKOUT (15–20 minutes)",
+                        description: "Do each exercise for 30–45 seconds, rest 15 seconds between. Repeat full circuit 2–3 rounds.",
+                        exercises: [
+                            {
+                                name: "Bodyweight Squats",
+                                time: "45 sec",
+                                reps: "12–15 reps",
+                                instructions: "Stand feet shoulder-width apart. Lower hips like sitting, chest up, push through heels to rise.",
+                                how_to_do: [
+                                    "Stand with feet shoulder-width apart.",
+                                    "Push hips back and lower as if sitting in a chair.",
+                                    "Keep chest upright, knees over toes.",
+                                    "Push through heels to return to start."
+                                ],
+                                benefits: "Strengthens legs, glutes, and core; improves balance."
+                            },
+                            {
+                                name: "Push-Ups / Knee Push-Ups",
+                                time: "30–40 sec",
+                                reps: "10–15 reps",
+                                instructions: "Hands under shoulders, body straight. Lower chest slowly, push back up.",
+                                how_to_do: [
+                                    "Get into plank position with hands under shoulders.",
+                                    "Lower your chest toward the floor slowly.",
+                                    "Push back up without locking elbows.",
+                                    "Beginners: drop knees to ground for support."
+                                ],
+                                benefits: "Builds chest, arms, shoulders, and core."
+                            },
+                            {
+                                name: "Plank Hold",
+                                time: "30–45 sec",
+                                reps: "Hold steady",
+                                instructions: "Forearms on floor, body in straight line. Tighten abs and glutes.",
+                                how_to_do: [
+                                    "Lie face down, then lift into plank on forearms and toes.",
+                                    "Keep body in a straight line.",
+                                    "Engage core and glutes.",
+                                    "Hold position while breathing evenly."
+                                ],
+                                benefits: "Builds core stability, posture, and focus."
+                            },
+                            {
+                                name: "Glute Bridge",
+                                time: "40 sec",
+                                reps: "12–15 reps",
+                                instructions: "Lie on back, knees bent, feet flat. Lift hips up, squeeze glutes, lower slowly.",
+                                how_to_do: [
+                                    "Lie on your back with knees bent and feet flat.",
+                                    "Lift hips until shoulders, hips, and knees form a line.",
+                                    "Squeeze glutes at the top.",
+                                    "Lower slowly and repeat."
+                                ],
+                                benefits: "Strengthens hips, glutes, and lower back."
+                            },
+                            {
+                                name: "Mountain Climbers",
+                                time: "30 sec",
+                                reps: "30 each leg",
+                                instructions: "Start in plank, alternate knees to chest in a running motion.",
+                                how_to_do: [
+                                    "Begin in plank position.",
+                                    "Drive right knee to chest, then quickly switch legs.",
+                                    "Keep core tight and move at a steady pace."
+                                ],
+                                benefits: "Boosts heart rate, endurance, and core strength."
+                            }
+                        ]
+                    },
+                    {
+                        title: "🧘 COOL DOWN (3–5 minutes)",
+                        description: "Helps your body recover and relax.",
+                        exercises: [
+                            {
+                                name: "Forward Bend",
+                                time: "1 min",
+                                reps: "Hold steady",
+                                instructions: "Stand tall, slowly reach toward your toes, relax your neck.",
+                                how_to_do: [
+                                    "Stand tall with feet together.",
+                                    "Exhale as you fold forward from hips.",
+                                    "Let arms and head hang naturally."
+                                ],
+                                benefits: "Relieves back tension and improves flexibility."
+                            },
+                            {
+                                name: "Shoulder Stretch",
+                                time: "1 min",
+                                reps: "Hold 30 sec each side",
+                                instructions: "Pull one arm across chest, hold; switch arms.",
+                                how_to_do: [
+                                    "Extend one arm across your chest.",
+                                    "Use the other hand to pull it gently toward you.",
+                                    "Hold for 30 seconds, then switch arms."
+                                ],
+                                benefits: "Stretches shoulders and upper back."
+                            },
+                            {
+                                name: "Seated Hamstring Stretch",
+                                time: "1 min",
+                                reps: "Hold steady",
+                                instructions: "Sit with legs straight, reach gently toward your feet.",
+                                how_to_do: [
+                                    "Sit on floor with legs straight.",
+                                    "Bend at hips and reach toward toes.",
+                                    "Hold without bouncing."
+                                ],
+                                benefits: "Improves flexibility and relaxes hamstrings."
+                            },
+                            {
+                                name: "Deep Breathing",
+                                time: "2 min",
+                                reps: "Slow breathing",
+                                instructions: "Sit comfortably, inhale through nose, exhale through mouth.",
+                                how_to_do: [
+                                    "Sit comfortably with eyes closed.",
+                                    "Inhale deeply through your nose for 4 seconds.",
+                                    "Exhale slowly through your mouth for 6 seconds.",
+                                    "Repeat and focus on calmness."
+                                ],
+                                benefits: "Promotes relaxation and mental clarity."
+                            }
+                        ]
+                    },
+                    {
+                        title: "🧠 MIND & FOCUS PRACTICE",
+                        description: "After each workout, take 1–2 minutes to center your mind.",
+                        exercises: [
+                            {
+                                name: "Mind Focus Meditation",
+                                time: "2 min",
+                                reps: "Slow breathing",
+                                instructions: "Sit quietly, close eyes, breathe slowly, repeat affirmation.",
+                                how_to_do: [
+                                    "Sit cross-legged or comfortably.",
+                                    "Close your eyes and take deep breaths.",
+                                    "Focus on how your body feels after workout.",
+                                    "Say: 'I am getting stronger, healthier, and more focused every day.'"
+                                ],
+                                benefits: "Improves focus, mindfulness, and motivation."
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        // App state
+        let currentExercise = null;
+        let timerInterval = null;
+        let timerSeconds = 0;
+        let isTimerRunning = false;
+        let totalExerciseTime = 0;
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+
+        // DOM elements
+        const sectionsContainer = document.getElementById('workoutView');
+        const timerContainer = document.getElementById('timerView');
+        const timerDisplay = document.querySelector('.timer-display');
+        const exerciseNameDisplay = document.querySelector('.exercise-name-display');
+        const exerciseInstructionsDisplay = document.querySelector('.exercise-instructions-display');
+        const timerProgressFill = document.querySelector('.timer-progress-fill');
+        const calendarGrid = document.getElementById('calendarGrid');
+        const activityChart = document.getElementById('activityChart');
+        const toast = document.getElementById('toast');
+
+        // Initialize the app
+        function initApp() {
+            renderWorkoutSections();
+            setupEventListeners();
+            updateStreakDisplay();
+            renderCalendar();
+            renderActivityChart();
+        }
+
+        // Render all workout sections
+        function renderWorkoutSections() {
+            sectionsContainer.innerHTML = '';
+            
+            appData.plan.sections.forEach((section, sectionIndex) => {
+                const sectionElement = createSectionElement(section, sectionIndex);
+                sectionsContainer.appendChild(sectionElement);
+            });
+        }
+
+        // Create section element
+        function createSectionElement(section, sectionIndex) {
+            const sectionDiv = document.createElement('div');
+            sectionDiv.className = 'section';
+            
+            sectionDiv.innerHTML = `
+                <div class="section-header">
+                    <h2>${section.title}</h2>
+                    <button class="section-toggle">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+                <div class="section-description">
+                    ${section.description}
+                </div>
+                <div class="exercises-list">
+                    ${section.exercises.map((exercise, exerciseIndex) => 
+                        createExerciseElement(exercise, sectionIndex, exerciseIndex)
+                    ).join('')}
+                </div>
+            `;
+            
+            return sectionDiv;
+        }
+
+        // Create exercise element
+        function createExerciseElement(exercise, sectionIndex, exerciseIndex) {
+            return `
+                <div class="exercise" data-section="${sectionIndex}" data-index="${exerciseIndex}">
+                    <div class="exercise-header">
+                        <div class="exercise-name">${exercise.name}</div>
+                        <div class="exercise-time">${exercise.time}</div>
+                    </div>
+                    <div class="exercise-details">
+                        <div class="exercise-reps">${exercise.reps}</div>
+                    </div>
+                    <div class="exercise-instructions">${exercise.instructions}</div>
+                    <button class="exercise-toggle">
+                        Show Details
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="exercise-details-content">
+                        <div class="how-to">
+                            <strong>How to do it:</strong>
+                            <ul class="how-to-list">
+                                ${exercise.how_to_do.map(step => `<li>${step}</li>`).join('')}
+                            </ul>
+                        </div>
+                        <div class="benefits">
+                            <strong>Benefits:</strong> ${exercise.benefits}
+                        </div>
+                        <div class="exercise-actions">
+                            <button class="btn btn-outline">
+                                <i class="fas fa-info-circle"></i>
+                                Details
+                            </button>
+                            <button class="btn btn-primary start-exercise">
+                                <i class="fas fa-play"></i>
+                                Start
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Section toggle buttons
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.section-toggle')) {
+                    const toggleBtn = e.target.closest('.section-toggle');
+                    const exercisesList = toggleBtn.closest('.section').querySelector('.exercises-list');
+                    const icon = toggleBtn.querySelector('i');
+                    
+                    exercisesList.classList.toggle('expanded');
+                    toggleBtn.classList.toggle('rotated');
+                    icon.classList.toggle('fa-chevron-down');
+                    icon.classList.toggle('fa-chevron-up');
+                }
+                
+                // Exercise toggle buttons
+                if (e.target.closest('.exercise-toggle')) {
+                    const toggleBtn = e.target.closest('.exercise-toggle');
+                    const content = toggleBtn.nextElementSibling;
+                    const icon = toggleBtn.querySelector('i');
+                    
+                    content.classList.toggle('active');
+                    toggleBtn.innerHTML = content.classList.contains('active') ? 
+                        'Hide Details <i class="fas fa-chevron-up"></i>' : 
+                        'Show Details <i class="fas fa-chevron-down"></i>';
+                }
+                
+                // Start exercise buttons
+                if (e.target.closest('.start-exercise')) {
+                    const exerciseElement = e.target.closest('.exercise');
+                    const sectionIndex = parseInt(exerciseElement.dataset.section);
+                    const exerciseIndex = parseInt(exerciseElement.dataset.index);
+                    const exercise = appData.plan.sections[sectionIndex].exercises[exerciseIndex];
+                    
+                    startExerciseTimer(exercise);
+                }
+            });
+            
+            // Timer controls
+            document.getElementById('pauseTimer').addEventListener('click', toggleTimer);
+            document.getElementById('completeExercise').addEventListener('click', completeExercise);
+            document.getElementById('closeTimer').addEventListener('click', closeTimer);
+            
+            // Calendar navigation
+            document.getElementById('prevMonth').addEventListener('click', showPreviousMonth);
+            document.getElementById('nextMonth').addEventListener('click', showNextMonth);
+            
+            // Bottom navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const viewName = this.getAttribute('data-view');
+                    switchView(viewName);
+                    
+                    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        }
+
+        // Switch between views
+        function switchView(viewName) {
+            // Hide all views
+            document.getElementById('workoutView').style.display = 'none';
+            document.getElementById('calendarView').classList.remove('active');
+            document.getElementById('statsView').classList.remove('active');
+            document.getElementById('settingsView').classList.remove('active');
+            
+            // Show selected view
+            if (viewName === 'workoutView') {
+                document.getElementById('workoutView').style.display = 'block';
+            } else {
+                document.getElementById(viewName).classList.add('active');
+            }
+        }
+
+        // Start exercise timer
+        function startExerciseTimer(exercise) {
+            currentExercise = exercise;
+            
+            // Parse time from string (e.g., "1 min" -> 60 seconds)
+            const timeMatch = exercise.time.match(/(\d+)\s*min/);
+            if (timeMatch) {
+                timerSeconds = parseInt(timeMatch[1]) * 60;
+            } else {
+                const secMatch = exercise.time.match(/(\d+)\s*sec/);
+                timerSeconds = secMatch ? parseInt(secMatch[1]) : 30;
+            }
+            
+            totalExerciseTime = timerSeconds;
+            exerciseNameDisplay.textContent = exercise.name;
+            exerciseInstructionsDisplay.textContent = exercise.instructions;
+            updateTimerDisplay();
+            timerProgressFill.style.width = '0%';
+            timerContainer.classList.add('active');
+            
+            startTimer();
+        }
+
+        // Start the timer
+        function startTimer() {
+            isTimerRunning = true;
+            document.getElementById('pauseTimer').innerHTML = '<i class="fas fa-pause"></i> Pause';
+            
+            timerInterval = setInterval(() => {
+                if (timerSeconds > 0) {
+                    timerSeconds--;
+                    updateTimerDisplay();
+                    
+                    // Update progress bar
+                    const progress = ((totalExerciseTime - timerSeconds) / totalExerciseTime) * 100;
+                    timerProgressFill.style.width = `${progress}%`;
+                } else {
+                    completeExercise();
+                }
+            }, 1000);
+        }
+
+        // Pause/resume timer
+        function toggleTimer() {
+            if (isTimerRunning) {
+                clearInterval(timerInterval);
+                document.getElementById('pauseTimer').innerHTML = '<i class="fas fa-play"></i> Resume';
+                isTimerRunning = false;
+            } else {
+                startTimer();
+            }
+        }
+
+        // Complete exercise
+        function completeExercise() {
+            clearInterval(timerInterval);
+            timerContainer.classList.remove('active');
+            isTimerRunning = false;
+            
+            // Show completion toast
+            showToast('Exercise completed! 🎉');
+            
+            // In a real app, you would save completion data
+            updateStreakDisplay();
+        }
+
+        // Close timer
+        function closeTimer() {
+            clearInterval(timerInterval);
+            timerContainer.classList.remove('active');
+            isTimerRunning = false;
+        }
+
+        // Update timer display
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timerSeconds / 60);
+            const seconds = timerSeconds % 60;
+            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Update streak display
+        function updateStreakDisplay() {
+            // In a real app, this would come from saved data
+            const streakCount = document.querySelector('.streak-count');
+            streakCount.textContent = '3'; // Example value
+        }
+
+        // Render calendar
+        function renderCalendar() {
+            calendarGrid.innerHTML = '';
+            
+            // Add weekday headers
+            const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            weekdays.forEach(day => {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day weekday';
+                dayElement.textContent = day;
+                calendarGrid.appendChild(dayElement);
+            });
+            
+            // Get first day of month and days in month
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const today = new Date();
+            
+            // Add empty cells for days before the first day of the month
+            for (let i = 0; i < firstDay; i++) {
+                const emptyElement = document.createElement('div');
+                emptyElement.className = 'calendar-day';
+                calendarGrid.appendChild(emptyElement);
+            }
+            
+            // Add calendar days
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = i;
+                
+                // Check if this day is today
+                if (i === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()) {
+                    dayElement.classList.add('today');
+                }
+                
+                // Mark completed days (example logic)
+                if (i <= today.getDate() && i % 2 === 0 && currentMonth === today.getMonth() && currentYear === today.getFullYear()) {
+                    dayElement.classList.add('completed');
+                }
+                
+                // Mark missed days (example logic)
+                if (i < today.getDate() && i % 3 === 0 && currentMonth === today.getMonth() && currentYear === today.getFullYear()) {
+                    dayElement.classList.add('missed');
+                }
+                
+                // Mark future days
+                if ((currentMonth > today.getMonth() && currentYear >= today.getFullYear()) || 
+                    (currentMonth === today.getMonth() && i > today.getDate() && currentYear === today.getFullYear()) ||
+                    (currentYear > today.getFullYear())) {
+                    dayElement.classList.add('future');
+                }
+                
+                calendarGrid.appendChild(dayElement);
+            }
+            
+            // Update calendar title
+            const monthNames = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"];
+            document.querySelector('.calendar-title').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+        }
+
+        // Show previous month
+        function showPreviousMonth() {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            renderCalendar();
+        }
+
+        // Show next month
+        function showNextMonth() {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar();
+        }
+
+        // Render activity chart
+        function renderActivityChart() {
+            activityChart.innerHTML = '';
+            
+            // Example data for weekly activity
+            const weeklyData = [65, 80, 45, 90, 70, 85, 60];
+            const dayLabels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+            
+            weeklyData.forEach((value, index) => {
+                const bar = document.createElement('div');
+                bar.className = 'chart-bar';
+                bar.style.height = `${value}%`;
+                bar.title = `${dayLabels[index]}: ${value}%`;
+                activityChart.appendChild(bar);
+            });
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
